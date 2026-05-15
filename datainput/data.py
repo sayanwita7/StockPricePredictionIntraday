@@ -9,16 +9,13 @@ class StockData:
         self.interval = interval
 
     def get_dataframe(self):
-
         ticker = yf.Ticker(self.ticker_name)
         df = ticker.history( period=self.period, interval=self.interval)
         df.drop('Dividends', axis=1, inplace=True)
         df.drop('Stock Splits', axis=1, inplace=True)
-
         return df
     
     def get_test_train_val_dataframe(self, df):
-
         df['Date'] = df.index.date
         df['Time'] = df.index.time
         latest_two = df['Date'].sort_values().unique()[-2:]
@@ -29,7 +26,6 @@ class StockData:
         df_train = df_before[df_before['Date'] < split_date_train_val]
         df_val  = df_before[df_before['Date'] >= split_date_train_val]
         
-
         df_test = df_test[["Open", "High", "Low", "Close", "Volume"]].copy()
         df_train = df_train[["Open", "High", "Low", "Close", "Volume"]].copy()
         df_val = df_val[["Open", "High", "Low", "Close", "Volume"]].copy()
@@ -64,4 +60,11 @@ class StockData:
         X_val, y_val = create_sequences(val_scaled, SEQ_LEN)
         X_test, y_test_scaled = create_sequences(test_scaled, SEQ_LEN)
 
-        return X_train, y_train, X_val, y_val, X_test, y_test_scaled
+        y_train_actual = close_scaler.inverse_transform(y_train.reshape(-1, 1))
+        y_val_actual = close_scaler.inverse_transform(y_val.reshape(-1, 1))
+        y_test_actual = close_scaler.inverse_transform(y_test_scaled.reshape(-1, 1))
+
+        return X_train, y_train, y_train_actual, X_val, y_val, y_val_actual, X_test, y_test_scaled, y_test_actual, close_scaler
+
+
+

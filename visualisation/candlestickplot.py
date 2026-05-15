@@ -51,4 +51,4 @@ class CandlestickPlot:
         self.prepare_data()
         fig = self.create_chart()
         st.title(self.date)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='content')
