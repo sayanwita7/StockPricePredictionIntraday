@@ -80,9 +80,9 @@ class Prediciton:
         callbacks = [lgb.early_stopping(stopping_rounds=100, verbose=False), lgb.log_evaluation(period=0)]
         self.lgbm_model.fit( self.X_train_flat, self.y_train, eval_set=[(self.X_train_flat, self.y_train), (self.X_val_flat, self.y_val)], eval_metric="l2", callbacks=callbacks)
 
-        self.gru_model = model_builder.get_gru_model(n_features = self.X_train.shape[2])
-        callbacks = [EarlyStopping(monitor="val_loss", patience=10, restore_best_weights=True), ReduceLROnPlateau(monitor="val_loss", factor=0.5, patience=5, min_lr=1e-6)]
-        self.gru_model.fit( self.X_train, self.y_train, validation_data = (self.X_val, self.y_val), epochs = 40 , batch_size = 32, callbacks  = callbacks)
+        # self.gru_model = model_builder.get_gru_model(n_features = self.X_train.shape[2])
+        # callbacks = [EarlyStopping(monitor="val_loss", patience=10, restore_best_weights=True), ReduceLROnPlateau(monitor="val_loss", factor=0.5, patience=5, min_lr=1e-6)]
+        # self.gru_model.fit( self.X_train, self.y_train, validation_data = (self.X_val, self.y_val), epochs = 40 , batch_size = 32, callbacks  = callbacks)
 
     def predict(self):
         y_pred_train = self.svm_model.predict(self.X_train_flat)
@@ -162,24 +162,24 @@ class Prediciton:
         )
         self.all_results.append(ridge_results)
 
-        y_pred_train = self.gru_model.predict(self.X_train)
-        y_pred_val = self.gru_model.predict(self.X_val)
-        y_pred_test = self.gru_model.predict(self.X_test)
+        # y_pred_train = self.gru_model.predict(self.X_train)
+        # y_pred_val = self.gru_model.predict(self.X_val)
+        # y_pred_test = self.gru_model.predict(self.X_test)
 
-        gru_results = self.evaluate_model(
-            model_name="GRU",
-            y_train=self.y_train,
-            y_val=self.y_val,
-            y_test=self.y_test_scaled,
-            y_pred_train=y_pred_train,
-            y_pred_val=y_pred_val,
-            y_pred_test=y_pred_test,
-        )
-        self.all_results.append(gru_results)
+        # gru_results = self.evaluate_model(
+        #     model_name="GRU",
+        #     y_train=self.y_train,
+        #     y_val=self.y_val,
+        #     y_test=self.y_test_scaled,
+        #     y_pred_train=y_pred_train,
+        #     y_pred_val=y_pred_val,
+        #     y_pred_test=y_pred_test,
+        # )
+        # self.all_results.append(gru_results)
     
     def evaluate(self):
         results = pd.DataFrame(self.all_results)
-        self.summary_df = results[["Model", "Train RMSE", "Validation RMSE", "Test RMSE"]]
+        self.summary_df = results[["Model", "Train RMSE", "Validation RMSE", "Test RMSE", "Train MSE", "Validation MSE", "Test MSE", "Train MAPE", "Validation MAPE", "Test MAPE"]]
         self.summary_df = self.summary_df.round(4)
         self.summary_df = self.summary_df.sort_values(by=["Validation RMSE", "Test RMSE"])
         self.summary_df = self.summary_df.reset_index(drop=True)

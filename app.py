@@ -19,11 +19,11 @@ for date, group in day_groups:
     with st.expander(f"View Data for {date}"):
         chart = CandlestickPlot(
             df=group,
-            date=date
+            title=f"Intraday Data for {date}",
+            x=group.index
         )
         chart.show_chart()
 
-# training = Prediction(ticker_name="RELIANCE.NS", period="8d", interval="1m")
 prediction = Prediciton(ticker_name="RELIANCE.NS", period="8d", interval="1m")
 with st.spinner("Training models... Please wait"):
     best_model_df, summary_df = prediction.run()
