@@ -9,7 +9,7 @@ st.markdown("This project aims to develop a machine learning-based stock price p
 
 st.subheader("Data Input: ")
 st.markdown( "The stock market data used in this dashboard has been fetched using yfinance. Interactive intraday candlestick charts for all loaded trading days are available below for detailed visualization and analysis.")
-stock = StockData( ticker_name="RELIANCE.NS", period="8d", interval="1m")
+stock = StockData( ticker_name="TCS.NS", period="8d", interval="1m")
 with st.spinner("Fetching Stock Prices... Please wait"):
     df = stock.get_dataframe()
 df_test, df_train, df_val= stock.get_test_train_val_dataframe(df)
@@ -24,7 +24,7 @@ for date, group in day_groups:
         )
         chart.show_chart()
 
-prediction = Prediciton(ticker_name="RELIANCE.NS", period="8d", interval="1m")
+prediction = Prediciton(ticker_name="TCS.NS", period="8d", interval="1m")
 with st.spinner("Training models... Please wait"):
     best_model_df, summary_df = prediction.run()
 
