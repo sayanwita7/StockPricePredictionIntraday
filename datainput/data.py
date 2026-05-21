@@ -8,6 +8,29 @@ class StockData:
         self.period = period
         self.interval = interval
 
+    def get_company_info(self):
+        ticker = yf.Ticker(self.ticker_name)
+        hist = ticker.history(period="2d")
+        info = ticker.info
+        prev = hist["Close"].iloc[-2]
+        last = hist["Close"].iloc[-1]
+        change = ((last - prev) / prev) * 100
+        arrow = "▲" if change >= 0 else "▼"
+        revenue = info.get("totalRevenue")
+        debt = info.get("totalDebt")
+        debt_ratio = (debt/revenue if debt and revenue else None)
+        data = {
+            "Company": info.get("shortName", self.ticker_name.replace(".NS", "")),
+            "Sector": info.get("sector", "-"),
+            "Close (₹)": round(last, 2),
+            "Change %": f"{arrow} {change:.2f}%",
+            "P/E": info.get("trailingPE", "-"),
+            "52W High (₹)": info.get("fiftyTwoWeekHigh","-"),
+            "52W Low (₹)": info.get("fiftyTwoWeekLow", "-"),
+            "Debt/Revenue": f"{debt_ratio:.2f}"  if debt_ratio is not None else "-"
+        }
+        return data
+
     def get_dataframe(self):
         ticker = yf.Ticker(self.ticker_name)
         df = ticker.history( period=self.period, interval=self.interval)

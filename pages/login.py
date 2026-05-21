@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from styles import load_login_styles
 
-st.set_page_config(page_title="Login", page_icon="📈", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Login", page_icon="🔑", layout="centered", initial_sidebar_state="collapsed")
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 
@@ -20,8 +20,8 @@ if st.button("⬅ Return to Main Page"):
 
 st.markdown("""
 <div class="card">
-<div class="logo"> 📈 </div>
-<div class="title"> Login </div>
+<div class="logo"> 🔑 </div>
+<div class="title"> Log In </div>
 <div class="subtitle"> Log In to Your Dashboard </div>
 """, unsafe_allow_html=True)
 
@@ -32,21 +32,30 @@ with st.form("login_form"):
 
 st.markdown("</div>", unsafe_allow_html=True)
 
+
+
 if submitted:
     if not username or not password:
         st.warning("Please enter username and password!")
     else:
-        df = pd.read_csv(CSV_FILE)
-        user = df[(df["Username"].astype(str).str.lower()== username.lower())&(df["Password"].astype(str)== password)]
-        if not user.empty:
+        if username == "admin" and password == "123456":
             st.session_state.logged_in = True
-            st.session_state.username = (user.iloc[0]["Username"])
-            st.session_state.email = (user.iloc[0]["Email"])
-            st.session_state.full_name = (user.iloc[0]["Full Name"])
-            st.success(f"Welcome {username}")
-            st.switch_page("pages/dashboard.py")
+            st.session_state.role = "admin"
+            st.session_state.username = "admin"
+            st.success("Welcome Admin 👑")
+            st.switch_page("pages/adminDashboard.py")
         else:
-            st.error("Invalid username or password")
+            df = pd.read_csv(CSV_FILE)
+            user = df[(df["Username"].astype(str).str.lower()== username.lower())&(df["Password"].astype(str)== password)]
+            if not user.empty:
+                st.session_state.logged_in = True
+                st.session_state.username = (user.iloc[0]["Username"])
+                st.session_state.email = (user.iloc[0]["Email"])
+                st.session_state.full_name = (user.iloc[0]["Full Name"])
+                st.success(f"Welcome {username}")
+                st.switch_page("pages/userDashboard.py")
+            else:
+                st.error("Invalid username or password")
 
 col1, col2 = st.columns([3, 1])
 

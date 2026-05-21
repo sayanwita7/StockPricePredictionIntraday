@@ -1,7 +1,6 @@
 import numpy as np
 from tensorflow.keras.callbacks import ( EarlyStopping, ReduceLROnPlateau)
 from sklearn.metrics import mean_squared_error, root_mean_squared_error, mean_absolute_percentage_error
-from sklearn.preprocessing import MinMaxScaler
 from datainput.data import StockData
 from model.Models import Models
 import lightgbm as lgb
@@ -85,6 +84,7 @@ class Prediciton:
         self.gru_model.fit( self.X_train, self.y_train, validation_data = (self.X_val, self.y_val), epochs = 40 , batch_size = 32, callbacks  = callbacks)
 
     def predict(self):
+
         y_pred_train = self.svm_model.predict(self.X_train_flat)
         y_pred_val = self.svm_model.predict(self.X_val_flat)
         y_pred_test = self.svm_model.predict(self.X_test_flat)
@@ -97,7 +97,6 @@ class Prediciton:
             y_pred_val=y_pred_val,
             y_pred_test=y_pred_test,
         )
-
         self.all_results.append(svm_results)
 
         y_pred_train = self.rf_model.predict(self.X_train_flat)
@@ -113,13 +112,11 @@ class Prediciton:
             y_pred_val=y_pred_val,
             y_pred_test=y_pred_test,
         )
-
         self.all_results.append(rf_results)
 
         y_pred_train = self.knn_model.predict(self.X_train_flat)
         y_pred_val = self.knn_model.predict(self.X_val_flat)
         y_pred_test = self.knn_model.predict(self.X_test_flat)
-
         knn_results = self.evaluate_model(
             model_name="KNN",
             y_train=self.y_train,
@@ -135,7 +132,6 @@ class Prediciton:
         y_pred_train = self.lgbm_model.predict(self.X_train_flat)
         y_pred_val = self.lgbm_model.predict(self.X_val_flat)
         y_pred_test = self.lgbm_model.predict(self.X_test_flat)
-
         lgb_results = self.evaluate_model(
             model_name="LightGBM",
             y_train=self.y_train,
@@ -150,7 +146,6 @@ class Prediciton:
         y_pred_train = self.ridge_model.predict(self.X_train_flat)
         y_pred_val = self.ridge_model.predict(self.X_val_flat)
         y_pred_test = self.ridge_model.predict(self.X_test_flat)
-
         ridge_results = self.evaluate_model(
             model_name="Ridge",
             y_train=self.y_train,
@@ -165,7 +160,6 @@ class Prediciton:
         y_pred_train = self.gru_model.predict(self.X_train)
         y_pred_val = self.gru_model.predict(self.X_val)
         y_pred_test = self.gru_model.predict(self.X_test)
-
         gru_results = self.evaluate_model(
             model_name="GRU",
             y_train=self.y_train,
@@ -185,6 +179,7 @@ class Prediciton:
         self.summary_df = self.summary_df.reset_index(drop=True)
         results = results.sort_values(by=["Validation RMSE", "Test RMSE"])
         best_model = results.iloc[0]
+        self.best_model_name = best_model["Model"]
         self.best_model_df = pd.DataFrame({
             "Actual": self.y_test_actual.flatten(),
             "Predicted": best_model["y_pred_test_actual"].flatten()
@@ -196,3 +191,11 @@ class Prediciton:
         self.predict()
         self.evaluate()
         return self.best_model_df, self.summary_df
+    
+    def get_prediction_dataframe(self):
+        results = {}
+        results["Actual"] = self.scaler.inverse_transform(self.y_test_scaled.reshape(-1,1)).flatten()
+        for result in self.all_results:
+            model_name = result["Model"]
+            results[model_name] = (result["y_pred_test_actual"].flatten() )
+        return pd.DataFrame(results), self.best_model_name

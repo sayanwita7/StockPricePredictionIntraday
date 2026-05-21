@@ -1,7 +1,6 @@
 import plotly.graph_objects as go
 import streamlit as st
 
-
 class CandlestickPlot:
     def __init__(self, df, title, x):
         self.df = df.copy()
@@ -50,4 +49,4 @@ class CandlestickPlot:
     def show_chart(self):
         self.prepare_data()
         fig = self.create_chart()
-        st.plotly_chart(fig, width='content')
+        st.plotly_chart(fig, use_container_width=True)

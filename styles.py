@@ -41,7 +41,7 @@ def load_styles():
         text-align:center;
         font-size:65px;
         font-weight:bold;
-        color:#00ffcc;
+        color:#304abf;
         text-shadow:2px 2px 12px black;
     }
     /* Subtitle */
@@ -64,7 +64,7 @@ def load_styles():
     .marquee{
         display:inline-block;
         animation:moveText 18s linear infinite;
-        color:#00ffcc;
+        color:#ffffff;
         font-size:24px;
         font-weight:bold;
     }
@@ -121,9 +121,9 @@ def load_dashboard_styles():
     .stApp{
         background: linear-gradient(
             135deg,
-            #0f172a,
-            #111827,
-            #1e293b
+            #0a0f1c,
+            #111826,
+            #161e2b
         );
         color:white;
     }
@@ -164,7 +164,7 @@ def load_dashboard_styles():
     .metric{
         font-size:28px;
         font-weight:bold;
-        color:#C47BE4;
+        color:#442ad4;
         margin-bottom:6px;
     }
     .label{
@@ -321,23 +321,13 @@ def load_login_styles():
         height:48px;
         border:none;
         border-radius:14px;
-        background:
-        linear-gradient(
-            90deg,
-            #7e22ce,
-            #9333ea
-        );
+        background: #304abf
         color:white;
         font-size:17px;
         font-weight:600;
     }
     div.stButton > button:hover{
-        background:
-        linear-gradient(
-            90deg,
-            #6d28d9,
-            #7e22ce
-        );
+        background:#304abf
     }
     /* Bottom Text */
     .bottom-text{
@@ -436,13 +426,7 @@ def load_register_styles():
         height:48px;
         border:none;
         border-radius:14px;
-
-        background:
-        linear-gradient(
-            90deg,
-            #7e22ce,
-            #9333ea
-        );
+        background:#304abf
         color:white;
         font-size:17px;
         font-weight:600;
@@ -479,7 +463,7 @@ def load_settings_styles():
         height:50px;
         border:none;
         border-radius:14px;
-        background: #C47BE4;
+        background: #304abf;
         color:white;
         font-size:17px;
         font-weight:bold;

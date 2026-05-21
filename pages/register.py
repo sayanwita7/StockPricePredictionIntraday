@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from styles import load_register_styles
 
-st.set_page_config(page_title="Register", page_icon="📈", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Register", page_icon="✍️", layout="centered", initial_sidebar_state="collapsed")
 
 CSV_FILE = "users.csv"
 if not os.path.exists(CSV_FILE):
@@ -16,7 +16,7 @@ if st.button("⬅ Return to Main Page"):
 st.markdown("""
 <div class="card">
 <div class="logo">
-📈
+✍️
 </div>
 <div class="title">
 Create Account

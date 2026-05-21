@@ -1,18 +1,11 @@
 import streamlit as st
 from styles import load_styles
 
-st.set_page_config(page_title="Stock Market Website", page_icon="📈", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="StockSense", page_icon="📈", layout="wide", initial_sidebar_state="collapsed")
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 load_styles()
 
-st.markdown("""
-<div class='title'> Stock Market Prediction </div>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<div class='subtitle'> Smart Investing • Better Market Insights • Future Planning </div>
-""", unsafe_allow_html=True)
 
 st.markdown("""
 <div class="marquee-container">
@@ -28,8 +21,11 @@ st.markdown("""
 st.write("")
 
 st.markdown("""
-<h2 style='text-align:center; color:white;'> Welcome to Smart Investing </h2>
-<p style='text-align:center; font-size:22px; color:#dddddd;'> Explore market trends, analyze performance and make smarter investment decisions with this stock prediction platform. </p>
+<div class='title'> StockSense </div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<p style='text-align:center; font-size:22px; color:#dddddd;'> Explore market trends for Indian companies listed under NSE. Analyze their daily, weekly, monthly and yearly performances corroborated by machine learning algorithms. Make smarter investment decisions with our platform. </p>
 """, unsafe_allow_html=True)
 st.write("")
 st.write("")
@@ -69,5 +65,5 @@ with col2:
 
 st.markdown("""
 <hr>
-<div class='footer'> Stock Market Prediction </div>
+<div class='footer'> Stock Market Analysis </div>
 """, unsafe_allow_html=True)
