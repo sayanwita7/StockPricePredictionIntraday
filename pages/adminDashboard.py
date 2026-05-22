@@ -5,6 +5,7 @@ import plotly.express as px
 from streamlit_option_menu import option_menu
 from datetime import datetime, timedelta
 
+from styles import load_settings_styles
 from datainput.data import StockData
 from pipelines.prediction import Prediciton
 from visualisation.candlestickplot import CandlestickPlot
@@ -48,8 +49,8 @@ def color_change(val):
 with st.sidebar:
     page = option_menu(
         menu_title="StockSense",
-        options=["Home","Stock Data","Models","Logout"],
-        icons=["house","database-fill","gear-fill","power"],
+        options=["Home","Stock Data","Models", "Settings", "Logout"],
+        icons=["house","database-fill", "robot", "gear-fill","power"],
         default_index=0,
         styles={
              "container":{
@@ -71,8 +72,8 @@ with st.sidebar:
     )
 
 if page == "Home":
-    st.markdown("<h1 style='text-align:center;'>StockSense: System Overview</h1>", unsafe_allow_html=True)
-    st.subheader("The available data being accessed using yFinance is available to view under the Stock Data tab. The model training results and other parameters is available under Models tab. Here's a quick market overview: ")
+    st.markdown("<h1 style='text-align:center;'>Market Overview</h1>", unsafe_allow_html=True)
+    st.markdown("The available data being accessed using yFinance is available to view under the Stock Data tab. The model training results and other parameters is available under Models tab. Here's a quick market overview: ")
     
     with st.spinner("Fetching data... Please wait"):
         tickers = load_tickers()
@@ -204,6 +205,45 @@ elif page == "Models":
     plotter = TestPredictionPlot(df_test, best_model_df["Actual"], best_model_df["Predicted"])
     fig = plotter.create_plot()
     st.plotly_chart(fig,  use_container_width=True, key=f"best_model_{best_model_name}")
+
+elif page == "Settings":
+    st.title("⚙️ Settings")
+    st.write("Manage your stock dashboard preferences.")
+    load_settings_styles()
+    st.markdown("""
+    
+    """, unsafe_allow_html=True)
+    st.subheader("👤 Account Settings")
+    full_name = st.text_input( "Full Name", value=st.session_state.full_name)
+    username = st.text_input("Change Username",value=st.session_state.username)
+    email = st.text_input( "Email Address", value=st.session_state.email)
+    if st.button("Save Account Settings"):
+        st.session_state.full_name = full_name
+        st.session_state.username = username
+        st.session_state.email = email
+        st.success("Account Settings Updated")
+
+    st.markdown("""
+    </div>
+    """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class="setting-card">
+    """, unsafe_allow_html=True)
+
+    st.subheader("🔒 Security Settings")
+    old_password = st.text_input("Old Password", type="password")
+    new_password = st.text_input("New Password",type="password")
+    confirm_password = st.text_input("Confirm Password", type="password")
+    if st.button("Update Password"):
+        if new_password != confirm_password:
+            st.error( "Passwords do not match")
+        elif new_password == "":
+            st.warning( "Enter new password")
+        else:
+            st.success("Password Updated Successfully")
+    st.markdown("""
+    </div>
+    """, unsafe_allow_html=True)
 
 elif page == "Logout":
     st.session_state.clear()

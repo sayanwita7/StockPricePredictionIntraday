@@ -41,6 +41,15 @@ st.set_page_config( page_title="StockSense", page_icon="📈", layout="wide")
 
 load_dashboard_styles()
 
+st.markdown("""
+    <style>
+    /* Hide default Streamlit multipage navigation */
+    [data-testid="stSidebarNav"] {
+        display: none;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 with st.sidebar:
 
     selected = option_menu(
